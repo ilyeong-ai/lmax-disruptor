@@ -5,6 +5,4 @@
 *.ear
 .idea/
 lmax-disruptor.iml
-.gitignore
-pom.xml
-src/
+
