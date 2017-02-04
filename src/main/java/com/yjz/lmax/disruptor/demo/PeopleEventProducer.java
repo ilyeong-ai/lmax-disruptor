@@ -15,6 +15,10 @@ public class PeopleEventProducer {
 
     private final RingBuffer<PeopleEvent> ringBuffer;
 
+    public PeopleEventProducer(RingBuffer ringBuffer){
+        this.ringBuffer = ringBuffer;
+    }
+
     private static final EventTranslatorOneArg<PeopleEvent,Map<String,Object>> tranlator = new EventTranslatorOneArg<PeopleEvent, Map<String, Object>>() {
         public void translateTo(PeopleEvent event, long sequence, Map<String, Object> data) {
             event.setName(data.get("name").toString());
@@ -22,11 +26,6 @@ public class PeopleEventProducer {
             event.setSex((Integer) data.get("sex"));
         }
     };
-
-    public PeopleEventProducer(RingBuffer ringBuffer){
-        this.ringBuffer = ringBuffer;
-    }
-
 
     /**
      * onData用来发布事件，每调用一次就发布一次事件，它的参数会通过事件传递给消费者
