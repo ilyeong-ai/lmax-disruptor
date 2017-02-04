@@ -57,7 +57,7 @@ EventProcessor持有特定消费者(Consumer)的Sequence，并提供用来调用
 
 ## 简单Demo
 
-1. 定义事件
+1.定义事件
 
 事件(Event)是Disruptor进行数据交换的数据类型
 
@@ -95,7 +95,7 @@ public class PeopleEvent {
 </code>
 </pre>
 
-2. 定义事件工厂
+2.定义事件工厂
 
 事件工厂(Event Factory)用来实例化之前的事件(Event)，需要实现接口com.lmax.disruptor.EventFactory<>。Disruptor通过EventFactory在
 RingBuffer中创建Event的实例。
@@ -111,39 +111,7 @@ public class PeopleEventFactory implements EventFactory<PeopleEvent> {
 }
 </code></pre>
 
-3. 定义事件源
-
-
-
-<pre><code class="java>
-public class PeopleEventProducer {
-
-    private final RingBuffer<PeopleEvent> ringBuffer;
-
-    private static final EventTranslatorOneArg<PeopleEvent,Map<String,Object>> tranlator = new EventTranslatorOneArg<PeopleEvent, Map<String, Object>>() {
-        public void translateTo(PeopleEvent event, long sequence, Map<String, Object> data) {
-            event.setName(data.get("name").toString());
-            event.setAge((Integer) data.get("age"));
-            event.setSex((Integer) data.get("sex"));
-        }
-    };
-
-    public PeopleEventProducer(RingBuffer ringBuffer){
-        this.ringBuffer = ringBuffer;
-    }
-
-
-    /**
-     * onData用来发布事件，每调用一次就发布一次事件，它的参数会通过事件传递给消费者
-     */
-    public void onData(Map<String,Object> data){
-        ringBuffer.publishEvent(tranlator,data);
-    }
-}
-
-</code></pre>
-
-4. 定义事件处理的具体实现(业务逻辑核心)
+3.定义事件处理的具体实现(业务逻辑核心)
 
 需要实现com.lmax.disruptor.EventHandler<>接口，来定义事件处理的具体逻辑
 
@@ -156,7 +124,7 @@ public class PeopleEventHandler implements EventHandler<PeopleEvent> {
 }
 </code></pre>
 
-5. 组合事件处理流程
+4.组合事件处理流程
 
 <pre><code class="java">
 public class DisruptorDemo {
@@ -214,7 +182,7 @@ public class DisruptorDemo {
 
 </code></pre>
 
-6. 事件发布
+5.事件发布
 
 事件发布包括三个步骤：
 
@@ -290,7 +258,7 @@ public class PeopleEventProducer {
 }
 </code></pre>
 
-7. 关闭Disruptor
+6.关闭Disruptor
 
 <pre><code class="java">
 disruptor.shutdown();
